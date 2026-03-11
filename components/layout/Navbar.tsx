@@ -1,20 +1,13 @@
-interface ErrorBannerProps {
-  message: string;
-}
-
-export default function ErrorBanner({ message }: ErrorBannerProps) {
+export default function Navbar() {
   return (
-    <div
+    <nav
       style={{
-        background: '#fee2e2',
-        color: '#991b1b',
-        border: '1px solid #fecaca',
-        borderRadius: 10,
-        padding: 12,
-        marginBottom: 16
+        padding: 16,
+        background: '#ffffff',
+        borderBottom: '1px solid #e5e7eb'
       }}
     >
-      {message}
-    </div>
+      <h2 style={{ margin: 0 }}>AI Life Admin</h2>
+    </nav>
   );
 }
