@@ -1,5 +1,4 @@
 import { ExtractedTask, SourceItem } from '../types';
-import { mockTasks } from '../data/mock';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
@@ -43,7 +42,7 @@ function mapBackendItemToTask(item: BackendItem): ExtractedTask {
 
 export async function fetchItems(): Promise<ExtractedTask[]> {
   if (!API_BASE_URL) {
-    return Promise.resolve(mockTasks);
+    throw new Error('NEXT_PUBLIC_API_BASE_URL is not configured');
   }
 
   const response = await fetch(`${API_BASE_URL}/items`);
