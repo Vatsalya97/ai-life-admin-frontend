@@ -14,8 +14,6 @@
     "typescript": "latest"
   }
 }
-
-
 {
   "compilerOptions": {
     "target": "ES6",
@@ -28,8 +26,6 @@
   },
   "include": ["pages/**/*", "types/**/*", "data/**/*"]
 }
-
-
 export interface SourceItem {
   id: string;
   sourceType: 'email' | 'pdf';
@@ -38,7 +34,6 @@ export interface SourceItem {
   uploadName?: string;
   extractedText: string;
 }
-
 export interface ExtractedTask {
   id: string;
   title: string;
@@ -50,10 +45,7 @@ export interface ExtractedTask {
   evidence: string;
   sourceId: string;
 }
-
-
 import { SourceItem, ExtractedTask } from '../types';
-
 export const mockSources: SourceItem[] = [
   {
     id: '1',
@@ -69,7 +61,6 @@ export const mockSources: SourceItem[] = [
     extractedText: 'Orientation starts on March 20 at 10:00 AM.'
   }
 ];
-
 export const mockTasks: ExtractedTask[] = [
   {
     id: 'task1',
@@ -91,16 +82,12 @@ export const mockTasks: ExtractedTask[] = [
     sourceId: '2'
   }
 ];
-
-
 import { NextPage } from 'next';
 import Link from 'next/link';
-
 const Home: NextPage = () => {
   const handleConnectGoogle = () => {
     alert('Google account connected! (mock)');
   };
-
   return (
     <div style={{ padding: 20 }}>
       <h1>AI Dashboard Home</h1>
@@ -109,18 +96,13 @@ const Home: NextPage = () => {
     </div>
   );
 };
-
 export default Home;
-
-
 import { NextPage } from 'next';
 import { mockTasks } from '../data/mock';
 import { ExtractedTask } from '../types';
-
 const Dashboard: NextPage = () => {
   const handleApprove = (id: string) => alert(`Approved task ${id}`);
   const handleDismiss = (id: string) => alert(`Dismissed task ${id}`);
-
   return (
     <div style={{ padding: 20 }}>
       <h1>Needs Review Dashboard</h1>
@@ -137,6 +119,4 @@ const Dashboard: NextPage = () => {
     </div>
   );
 };
-
 export default Dashboard;
-
