@@ -7,7 +7,14 @@ import TaskList from '../components/dashboard/TaskList';
 import SourcePreview from '../components/dashboard/SourcePreview';
 import EditTaskModal from '../components/modals/EditTaskModal';
 import { ExtractedTask, ItemStatus, SourceItem } from '../types';
-import { fetchItems, fetchSourceById, syncGmail, uploadPdf } from '../lib/api';
+import {
+  fetchItems,
+  fetchSourceById,
+  syncGmail,
+  uploadPdf,
+  approveItem,
+  dismissItem
+} from '../lib/api';
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<ExtractedTask[]>([]);
@@ -62,18 +69,37 @@ export default function DashboardPage() {
     [tasks, activeTab]
   );
 
-  const updateTaskStatus = (id: string, status: ItemStatus) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id
-          ? { ...task, status, updatedAt: new Date().toISOString() }
-          : task
-      )
-    );
+  const handleApprove = async (id: string) => {
+    try {
+      setError('');
+      await approveItem(id);
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === id
+            ? { ...task, status: 'approved', updatedAt: new Date().toISOString() }
+            : task
+        )
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Approve failed');
+    }
   };
 
-  const handleApprove = (id: string) => updateTaskStatus(id, 'approved');
-  const handleDismiss = (id: string) => updateTaskStatus(id, 'dismissed');
+  const handleDismiss = async (id: string) => {
+    try {
+      setError('');
+      await dismissItem(id);
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === id
+            ? { ...task, status: 'dismissed', updatedAt: new Date().toISOString() }
+            : task
+        )
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Dismiss failed');
+    }
+  };
 
   const handleSaveEdit = (taskId: string, updates: Partial<ExtractedTask>) => {
     setTasks((prev) =>
