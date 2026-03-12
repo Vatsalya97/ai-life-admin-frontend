@@ -43,10 +43,6 @@ function mapBackendItemToTask(item: BackendItem): ExtractedTask {
 }
 
 export async function fetchItems(): Promise<ExtractedTask[]> {
-  if (!API_BASE_URL) {
-    throw new Error('NEXT_PUBLIC_API_BASE_URL is not configured');
-  }
-
   const response = await fetch(`${API_BASE_URL}/items`);
 
   if (!response.ok) {
@@ -95,11 +91,20 @@ export async function syncGmail(): Promise<{ success: boolean; message: string }
   return response.json();
 }
 
-export async function uploadPdf(_file: File): Promise<{ success: boolean; message: string }> {
-  return {
-    success: false,
-    message: 'PDF upload from frontend is not implemented in the backend yet.'
-  };
+export async function uploadImage(file: File): Promise<{ success: boolean; message: string }> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch(`${API_BASE_URL}/upload-image`, {
+    method: 'POST',
+    body: formData
+  });
+
+  if (!response.ok) {
+    throw new Error('Image upload failed');
+  }
+
+  return response.json();
 }
 
 export async function fetchSourceById(_id: string): Promise<SourceItem | undefined> {
