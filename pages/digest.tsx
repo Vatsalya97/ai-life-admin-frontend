@@ -8,7 +8,7 @@ import SourcePreview from '../components/dashboard/SourcePreview';
 import EditTaskModal from '../components/modals/EditTaskModal';
 import { mockSources, mockTasks } from '../data/mock';
 import { ExtractedTask, ItemStatus } from '../types';
-import { syncGmail, uploadPdf } from '../lib/api';
+import { syncGmail, uploadImage } from '../lib/api';
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState(mockTasks);
@@ -72,7 +72,7 @@ export default function DashboardPage() {
 
     try {
       setError('');
-      const result = await uploadPdf(file);
+      const result = await uploadImage(file);
       setUploadMessage(result.message);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
