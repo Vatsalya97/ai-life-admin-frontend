@@ -11,7 +11,7 @@ import {
   fetchItems,
   fetchSourceById,
   syncGmail,
-  uploadPdf,
+  uploadImage,
   approveItem,
   dismissItem
 } from '../lib/api';
@@ -73,6 +73,7 @@ export default function DashboardPage() {
     try {
       setError('');
       await approveItem(id);
+
       setTasks((prev) =>
         prev.map((task) =>
           task.id === id
@@ -89,6 +90,7 @@ export default function DashboardPage() {
     try {
       setError('');
       await dismissItem(id);
+
       setTasks((prev) =>
         prev.map((task) =>
           task.id === id
@@ -127,14 +129,19 @@ export default function DashboardPage() {
     fileInputRef.current?.click();
   };
 
-  const handlePdfUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+
+    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+      setError('Only JPEG and PNG images are supported.');
+      return;
+    }
 
     try {
       setError('');
       setUploadMessage('');
-      const result = await uploadPdf(file);
+      const result = await uploadImage(file);
       setUploadMessage(result.message);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
@@ -169,9 +176,11 @@ export default function DashboardPage() {
 
       <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
         <Button onClick={handleSyncGmail}>Sync Gmail</Button>
+
         <Button variant="secondary" onClick={handleUploadClick}>
-          Upload PDF
+          Upload Image
         </Button>
+
         <Button variant="secondary" onClick={() => (window.location.href = '/digest')}>
           Preview Digest
         </Button>
@@ -180,8 +189,8 @@ export default function DashboardPage() {
       <input
         ref={fileInputRef}
         type="file"
-        accept="application/pdf"
-        onChange={handlePdfUpload}
+        accept="image/jpeg,image/png"
+        onChange={handleImageUpload}
         style={{ display: 'none' }}
       />
 
